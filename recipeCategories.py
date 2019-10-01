@@ -24,7 +24,7 @@ cuisines = [
     'african',
     'cajun-creole',
     'central-south-american',
-    'eastern-european',
+    'eastern-european-russian',
     'german',
     'italian-american',
     'korean',
@@ -49,7 +49,7 @@ cuisines = [
     'moroccan',
     'indian',
     'british',
-    'caribbean',
+    'central-american-caribbean',
     'cuban',
     'european',
     'irish',
@@ -72,7 +72,12 @@ for cuisine in cuisines:
 
     page = requests.get(cuisine_url).content
     soup = BeautifulSoup(page, features="html.parser")
-    num_pages = get_number_of_pages(soup)
+    try:
+        num_pages = get_number_of_pages(soup)
+    except IndexError as e:
+        print(e)
+        print(cuisine)
+        assert False
 
     cuisine_urls[cuisine] += extract_urls(soup)
 
@@ -84,7 +89,6 @@ for cuisine in cuisines:
 
         page = requests.get(current_url).content
         soup = BeautifulSoup(page, features="html.parser")
-        num_pages = get_number_of_pages(soup)
 
         cuisine_urls[cuisine] += extract_urls(soup)
 
